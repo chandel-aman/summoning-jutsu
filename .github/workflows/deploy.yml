@@ -1,0 +1,39 @@
+name: Deploy Blogs to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "attack-on-blogs/**/*.mdx"
+      - "origin-arc/index.mdx"
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Generate JSON metadata
+      - name: Generate blogs and about JSON
+        run: node scripts/generate_json.js
+
+      # 5. Deploy JSON files to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./json
