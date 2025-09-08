@@ -1,6 +1,7 @@
 {
   "name": "blogs",
   "version": "1.0.0",
+  "type": "module",
   "description": "Personal blog repository",
   "main": "index.js",
   "scripts": {

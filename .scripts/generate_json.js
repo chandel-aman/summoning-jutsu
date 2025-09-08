@@ -1,19 +1,19 @@
-const fs = require("fs");
-const path = require("path");
-const matter = require("gray-matter");
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
+import { join } from "path";
+import matter from "gray-matter";
 
-const outputDir = path.join(process.cwd(), "otaku-archive");
-if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
+const outputDir = join(process.cwd(), "otaku-archive");
+if (!existsSync(outputDir)) mkdirSync(outputDir);
 
 const blogDir = "attack-on-blogs";
 const blogs = [];
 
-fs.readdirSync(blogDir, { withFileTypes: true })
+readdirSync(blogDir, { withFileTypes: true })
   .filter((d) => d.isDirectory())
   .forEach((dir) => {
-    const mdxPath = path.join(blogDir, dir.name, "index.mdx");
-    if (fs.existsSync(mdxPath)) {
-      const fileContent = fs.readFileSync(mdxPath, "utf-8");
+    const mdxPath = join(blogDir, dir.name, "index.mdx");
+    if (existsSync(mdxPath)) {
+      const fileContent = readFileSync(mdxPath, "utf-8");
       const { data } = matter(fileContent);
       blogs.push({
         slug: dir.name,
@@ -23,17 +23,17 @@ fs.readdirSync(blogDir, { withFileTypes: true })
     }
   });
 
-fs.writeFileSync(
-  path.join(outputDir, "blogs.json"),
+writeFileSync(
+  join(outputDir, "blogs.json"),
   JSON.stringify(blogs, null, 2)
 );
 console.log("blogs.json with descriptions generated!");
 
 // ---- About JSON ----
-const aboutPath = path.join("origin-arc", "index.mdx");
-if (fs.existsSync(aboutPath)) {
-  fs.writeFileSync(
-    path.join(outputDir, "about.json"),
+const aboutPath = join("origin-arc", "index.mdx");
+if (existsSync(aboutPath)) {
+  writeFileSync(
+    join(outputDir, "about.json"),
     JSON.stringify({ path: "origin-arc/index.mdx" }, null, 2)
   );
   console.log("about.json generated!");

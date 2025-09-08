@@ -1,7 +1,7 @@
-const fs = require("fs");
-const path = require("path");
-const fetch = require("node-fetch");
-const { Octokit } = require("@octokit/rest");
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { join } from "path";
+import fetch from "node-fetch";
+import { Octokit } from "@octokit/rest";
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -24,17 +24,17 @@ const bookTitle = issue.title;
 console.log(`Processing book: ${bookTitle} (Action: ${eventAction})`);
 
 // Update books.json in the same directory
-const booksDir = path.join(process.cwd(), "otaku-archive");
-const booksFile = path.join(booksDir, "books.json");
+const booksDir = join(process.cwd(), "otaku-archive");
+const booksFile = join(booksDir, "books.json");
 
 // Ensure the directory exists
-if (!fs.existsSync(booksDir)) {
-  fs.mkdirSync(booksDir, { recursive: true });
+if (!existsSync(booksDir)) {
+  mkdirSync(booksDir, { recursive: true });
 }
 
 let books = [];
-if (fs.existsSync(booksFile)) {
-  books = JSON.parse(fs.readFileSync(booksFile, "utf-8"));
+if (existsSync(booksFile)) {
+  books = JSON.parse(readFileSync(booksFile, "utf-8"));
 }
 
 if (eventAction === "opened") {
@@ -69,7 +69,7 @@ if (eventAction === "opened") {
   };
 
   books.push(bookEntry);
-  fs.writeFileSync(booksFile, JSON.stringify(books, null, 2));
+  writeFileSync(booksFile, JSON.stringify(books, null, 2));
   console.log("books.json updated!");
 
   // Comment on the issue
@@ -90,7 +90,7 @@ if (eventAction === "opened") {
     books[bookIndex].status = "completed";
     books[bookIndex].end_date = new Date().toISOString().split("T")[0];
     
-    fs.writeFileSync(booksFile, JSON.stringify(books, null, 2));
+    writeFileSync(booksFile, JSON.stringify(books, null, 2));
     console.log("books.json updated - book marked as completed!");
 
     // Comment on the issue
