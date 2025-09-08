@@ -1,4 +1,10 @@
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "fs";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from "fs";
 import { join } from "path";
 import matter from "gray-matter";
 
@@ -23,10 +29,7 @@ readdirSync(blogDir, { withFileTypes: true })
     }
   });
 
-writeFileSync(
-  join(outputDir, "blogs.json"),
-  JSON.stringify(blogs, null, 2)
-);
+writeFileSync(join(outputDir, "blogs.json"), JSON.stringify(blogs, null, 2));
 console.log("blogs.json with descriptions generated!");
 
 // ---- About JSON ----
@@ -34,7 +37,14 @@ const aboutPath = join("origin-arc", "index.mdx");
 if (existsSync(aboutPath)) {
   writeFileSync(
     join(outputDir, "about.json"),
-    JSON.stringify({ path: "origin-arc/index.mdx" }, null, 2)
+    JSON.stringify(
+      {
+        path: "origin-arc/index.mdx",
+        content: readFileSync(aboutPath, "utf-8"),
+      },
+      null,
+      2
+    )
   );
   console.log("about.json generated!");
 } else {
