@@ -25,32 +25,6 @@ function calculateReadTime(content) {
   return `${readTime} min read`;
 }
 
-// Helper function to parse MDX content and extract frontmatter
-function parseMDXContent(content) {
-  const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = content.match(frontmatterRegex);
-
-  if (match) {
-    const frontmatterString = match[1];
-    const mdxContent = match[2];
-
-    // Parse frontmatter (simple YAML-like parsing)
-    const frontmatter = {};
-    frontmatterString.split("\n").forEach((line) => {
-      const [key, ...valueParts] = line.split(":");
-      if (key && valueParts.length > 0) {
-        const value = valueParts.join(":").trim();
-        // Remove quotes if present
-        frontmatter[key.trim()] = value.replace(/^["']|["']$/g, "");
-      }
-    });
-
-    return { frontmatter, content: mdxContent };
-  }
-
-  return { frontmatter: {}, content };
-}
-
 readdirSync(blogDir, { withFileTypes: true })
   .filter((d) => d.isDirectory())
   .forEach((dir) => {
@@ -58,15 +32,17 @@ readdirSync(blogDir, { withFileTypes: true })
     if (existsSync(mdxPath)) {
       const fileContent = readFileSync(mdxPath, "utf-8");
       const { data: frontmatter, content } = matter(fileContent);
-      
+
       // Calculate word count and read time
       const wordCount = content.split(/\s+/).length;
       const readTime = calculateReadTime(content);
-      
+
       // Create blog post object with all BlogPost interface fields except content
       const blogPost = {
         slug: dir.name,
-        title: frontmatter.title || dir.name.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+        title:
+          frontmatter.title ||
+          dir.name.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
         description: frontmatter.description || "",
         date: frontmatter.date || new Date().toISOString().split("T")[0],
         readTime: readTime,
@@ -74,9 +50,9 @@ readdirSync(blogDir, { withFileTypes: true })
         image: frontmatter.image || null,
         wordCount: wordCount,
       };
-      
+
       blogs.push(blogPost);
-      
+
       // Create individual <slug>.mdx file in blogs directory
       const individualMdxPath = join(blogsDir, `${dir.name}.mdx`);
       writeFileSync(individualMdxPath, fileContent);
