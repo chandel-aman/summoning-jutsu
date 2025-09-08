@@ -1,0 +1,22 @@
+[
+  {
+    "slug": "ai-in-web-development",
+    "path": "ai-in-web-development/index.mdx",
+    "description": "Exploring how artificial intelligence is transforming web development, from code generation to automated testing and deployment."
+  },
+  {
+    "slug": "design-systems",
+    "path": "design-systems/index.mdx",
+    "description": "Learn how to create and maintain design systems that scale with your team and product, covering everything from tokens to component libraries."
+  },
+  {
+    "slug": "getting-started-with-nextjs",
+    "path": "getting-started-with-nextjs/index.mdx",
+    "description": "A comprehensive guide to building modern web applications with Next.js 15, covering the latest features and best practices."
+  },
+  {
+    "slug": "testing-mdx-renderer",
+    "path": "testing-mdx-renderer/index.mdx",
+    "description": "A comprehensive test document to verify that your MDX renderer supports all formatting elements, including text styles, lists, code blocks, blockquotes, tables, custom components, and edge cases."
+  }
+]
