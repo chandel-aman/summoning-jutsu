@@ -23,4 +23,6 @@ jobs:
       - name: Run book tracker
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: node .scripts/track_book.js
