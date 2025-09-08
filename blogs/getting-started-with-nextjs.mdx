@@ -1,0 +1,59 @@
+---
+title: "Getting Started with Next.js 15"
+description: "A comprehensive guide to building modern web applications with Next.js 15, covering the latest features and best practices."
+date: "2024-01-15"
+---
+
+# Getting Started with Next.js 15
+
+Next.js 15 brings exciting new features and improvements that make building modern web applications even more enjoyable. In this post, we'll explore the key features and how to get started.
+
+## What's New in Next.js 15
+
+### App Router Enhancements
+The App Router continues to evolve with better performance and developer experience. The new caching strategies and improved routing make it easier to build complex applications.
+
+### Server Components
+Server Components allow you to run React components on the server, reducing the JavaScript bundle size and improving performance.
+
+```jsx
+// Example Server Component
+async function BlogPost({ slug }) {
+  const post = await fetch(`/api/posts/${slug}`);
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+    </article>
+  );
+}
+```
+
+### Improved Performance
+Next.js 15 includes several performance improvements:
+- Faster build times
+- Better tree shaking
+- Optimized bundle splitting
+
+## Getting Started
+
+To create a new Next.js project:
+
+```bash
+npx create-next-app@latest my-app
+cd my-app
+npm run dev
+```
+
+## Best Practices
+
+1. **Use TypeScript** - Better developer experience and fewer runtime errors
+2. **Implement proper SEO** - Use the built-in metadata API
+3. **Optimize images** - Use the Next.js Image component
+4. **Leverage Server Components** - For better performance
+
+## Conclusion
+
+Next.js 15 is a powerful framework that continues to push the boundaries of what's possible with React. The new features make it easier than ever to build fast, scalable web applications.
+
+Start your Next.js journey today and experience the future of web development!
