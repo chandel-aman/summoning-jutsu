@@ -83,8 +83,12 @@ if (eventAction === "opened") {
 
 } else if (eventAction === "closed") {
   // Find and update the book to completed using issue number
+  const targetIssueNumber = parseInt(issueNumber);
+  console.log(`Looking for book with issue number: ${targetIssueNumber} (type: ${typeof targetIssueNumber})`);
+  console.log(`Available books:`, books.map(book => ({ title: book.title, issue_number: book.issue_number, type: typeof book.issue_number })));
+  
   const bookIndex = books.findIndex(book => 
-    book.issue_number === parseInt(issueNumber)
+    parseInt(book.issue_number) === targetIssueNumber
   );
 
   if (bookIndex !== -1) {
@@ -94,12 +98,17 @@ if (eventAction === "opened") {
     writeFileSync(booksFile, JSON.stringify(books, null, 2));
     console.log("books.json updated - book marked as completed!");
 
+    // Handle author field - it might be an array or string
+    const author = Array.isArray(books[bookIndex].author) 
+      ? books[bookIndex].author.join(", ") 
+      : books[bookIndex].author;
+
     // Comment on the issue
     await octokit.issues.createComment({
       owner,
       repo,
       issue_number: issueNumber,
-      body: `🎉 Book completed: **${books[bookIndex].title}** by ${books[bookIndex].author}`,
+      body: `🎉 Book completed: **${books[bookIndex].title}** by ${author}`,
     });
   } else {
     console.log(`Book not found in books.json for issue #${issueNumber}`);
