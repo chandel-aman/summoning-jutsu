@@ -2,7 +2,7 @@ name: Track Books
 
 on:
   issues:
-    types: [opened]
+    types: [opened, closed]
 
 jobs:
   track-book:
@@ -25,4 +25,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
+          GITHUB_EVENT_ACTION: ${{ github.event.action }}
         run: node .scripts/track_book.js
