@@ -59,7 +59,7 @@ if (eventAction === "opened") {
   const book = data.docs[0];
   const bookEntry = {
     title: book.title,
-    author: book.author_name?.[0] || "Unknown",
+    author: book.author_name || "Unknown",
     image: book.cover_i
       ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`
       : "",

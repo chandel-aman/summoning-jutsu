@@ -27,3 +27,11 @@ jobs:
           GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
           GITHUB_EVENT_ACTION: ${{ github.event.action }}
         run: node .scripts/track_book.js
+      
+      - name: Deploy JSON to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./otaku-archive
+          user_name: github-actions
+          user_email: github-actions@github.com
