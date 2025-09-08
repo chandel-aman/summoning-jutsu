@@ -66,6 +66,7 @@ if (eventAction === "opened") {
     status: "reading",
     start_date: new Date().toISOString().split("T")[0],
     end_date: null,
+    issue_number: parseInt(issueNumber),
   };
 
   books.push(bookEntry);
@@ -81,9 +82,9 @@ if (eventAction === "opened") {
   });
 
 } else if (eventAction === "closed") {
-  // Find and update the book to completed
+  // Find and update the book to completed using issue number
   const bookIndex = books.findIndex(book => 
-    book.title.toLowerCase() === bookTitle.toLowerCase()
+    book.issue_number === parseInt(issueNumber)
   );
 
   if (bookIndex !== -1) {
@@ -101,12 +102,12 @@ if (eventAction === "opened") {
       body: `🎉 Book completed: **${books[bookIndex].title}** by ${books[bookIndex].author}`,
     });
   } else {
-    console.log(`Book not found in books.json: ${bookTitle}`);
+    console.log(`Book not found in books.json for issue #${issueNumber}`);
     await octokit.issues.createComment({
       owner,
       repo,
       issue_number: issueNumber,
-      body: `⚠️ Book not found in tracking list: ${bookTitle}`,
+      body: `⚠️ Book not found in tracking list for issue #${issueNumber}`,
     });
   }
 }
