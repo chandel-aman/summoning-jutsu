@@ -1,39 +1,38 @@
-name: Deploy Blogs to GitHub Pages
+name: Deploy JSON to GitHub Pages
 
 on:
   push:
     branches:
       - main
-    paths:
-      - "attack-on-blogs/**/*.mdx"
-      - "origin-arc/index.mdx"
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repo
+      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Setup Node.js
+      # 2️⃣ Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: '20'
 
-      # 3. Install dependencies
+      # 3️⃣ Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm install gray-matter node-fetch @octokit/rest
 
-      # 4. Generate JSON metadata
-      - name: Generate blogs and about JSON
-        run: node scripts/generate_json.js
+      # 4️⃣ Generate JSON files
+      - name: Generate blogs, about, and books JSON
+        run: node scripts/generateContentJSON.js
 
-      # 5. Deploy JSON files to GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v6
+      # 5️⃣ Deploy to GitHub Pages
+      - name: Deploy JSON to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./json
+          publish_dir: ./otaku-archive
+          user_name: github-actions
+          user_email: github-actions@github.com
