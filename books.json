@@ -1,13 +1,13 @@
 [
   {
-    "title": "Harry Potter and the Philosopher's Stone",
+    "title": "Harry Potter and the Chamber of Secrets",
     "author": [
       "J. K. Rowling"
     ],
-    "image": "https://covers.openlibrary.org/b/id/10521270-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/8392798-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 15
+    "issue_number": 16
   }
 ]
