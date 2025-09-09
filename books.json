@@ -1,13 +1,13 @@
 [
   {
-    "title": "Pride and Prejudice",
+    "title": "How to Win Friends and Influence People",
     "author": [
-      "Jane Austen"
+      "Dale Carnegie"
     ],
-    "image": "https://covers.openlibrary.org/b/id/14348537-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/13314878-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 13
+    "issue_number": 14
   }
 ]
