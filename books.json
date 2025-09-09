@@ -1,13 +1,13 @@
 [
   {
-    "title": "The Merchant of Venice",
+    "title": "The Tempest",
     "author": [
       "William Shakespeare"
     ],
-    "image": "https://covers.openlibrary.org/b/id/7182819-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/8155661-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 22
+    "issue_number": 23
   }
 ]
