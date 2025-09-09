@@ -1,14 +1,14 @@
 [
   {
-    "title": "Harry Potter and the Goblet of Fire",
+    "title": "Harry Potter and the Half-Blood Prince",
     "author": [
       "J. K. Rowling",
-      "Jim Kay"
+      "Mary GrandPré"
     ],
-    "image": "https://covers.openlibrary.org/b/id/12059372-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/10716273-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 18
+    "issue_number": 20
   }
 ]
