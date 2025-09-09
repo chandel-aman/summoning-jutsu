@@ -1,13 +1,14 @@
 [
   {
-    "title": "The Alchemist, 1612",
+    "title": "The Unlikely Pilgrimage of Harold Fry",
     "author": [
-      "Ben Jonson"
+      "Rachel Joyce",
+      "Yisi Qiao"
     ],
-    "image": "https://covers.openlibrary.org/b/id/7463992-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/8345147-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 10
+    "issue_number": 11
   }
 ]
