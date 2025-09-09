@@ -1,15 +1,13 @@
 [
   {
-    "title": "The Diary of Anne Frank",
+    "title": "Pride and Prejudice",
     "author": [
-      "Frances Goodrich",
-      "Albert Hackett",
-      "Anne Frank"
+      "Jane Austen"
     ],
-    "image": "https://covers.openlibrary.org/b/id/116790-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/14348537-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 12
+    "issue_number": 13
   }
 ]
