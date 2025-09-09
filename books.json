@@ -1,13 +1,13 @@
 [
   {
-    "title": "Harry Potter and the Deathly Hallows",
+    "title": "The Merchant of Venice",
     "author": [
-      "J. K. Rowling"
+      "William Shakespeare"
     ],
-    "image": "https://covers.openlibrary.org/b/id/10110415-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/7182819-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 21
+    "issue_number": 22
   }
 ]
