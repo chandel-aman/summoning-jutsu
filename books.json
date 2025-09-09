@@ -1,14 +1,15 @@
 [
   {
-    "title": "The Unlikely Pilgrimage of Harold Fry",
+    "title": "The Diary of Anne Frank",
     "author": [
-      "Rachel Joyce",
-      "Yisi Qiao"
+      "Frances Goodrich",
+      "Albert Hackett",
+      "Anne Frank"
     ],
-    "image": "https://covers.openlibrary.org/b/id/8345147-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/116790-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 11
+    "issue_number": 12
   }
 ]
