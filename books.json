@@ -1,14 +1,13 @@
 [
   {
-    "title": "Harry Potter and the Half-Blood Prince",
+    "title": "Harry Potter and the Deathly Hallows",
     "author": [
-      "J. K. Rowling",
-      "Mary GrandPré"
+      "J. K. Rowling"
     ],
-    "image": "https://covers.openlibrary.org/b/id/10716273-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/10110415-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 20
+    "issue_number": 21
   }
 ]
