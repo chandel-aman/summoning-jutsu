@@ -1,13 +1,13 @@
 [
   {
-    "title": "Harry Potter and the Chamber of Secrets",
+    "title": "Harry Potter and the Prisoner of Azkaban",
     "author": [
       "J. K. Rowling"
     ],
-    "image": "https://covers.openlibrary.org/b/id/8392798-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/10580435-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 16
+    "issue_number": 17
   }
 ]
