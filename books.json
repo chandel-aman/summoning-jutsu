@@ -1,13 +1,13 @@
 [
   {
-    "title": "Nineteen Eighty-Four",
+    "title": "And Then There Were None",
     "author": [
-      "George Orwell"
+      "Agatha Christie"
     ],
-    "image": "https://covers.openlibrary.org/b/id/9267242-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/11172296-L.jpg",
     "status": "reading",
-    "start_date": "2025-09-08",
+    "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 8
+    "issue_number": 9
   }
 ]
