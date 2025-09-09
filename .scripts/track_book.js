@@ -38,14 +38,21 @@ if (existsSync(booksFile)) {
 }
 
 if (eventAction === "opened") {
-  // Search Open Library
+  // Search Google Books API
   const query = encodeURIComponent(bookTitle);
+  const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
+  
+  if (!apiKey) {
+    console.log("Warning: GOOGLE_BOOKS_API_KEY not set, using public API (limited requests)");
+  }
+  
+  const apiKeyParam = apiKey ? `&key=${apiKey}` : "";
   const res = await fetch(
-    `https://openlibrary.org/search.json?title=${query}&limit=1`
+    `https://www.googleapis.com/books/v1/volumes?q=intitle:${query}&maxResults=1${apiKeyParam}`
   );
   const data = await res.json();
 
-  if (data.numFound === 0) {
+  if (!data.items || data.items.length === 0) {
     await octokit.issues.createComment({
       owner,
       repo,
@@ -56,17 +63,23 @@ if (eventAction === "opened") {
   }
 
   // Get book details
-  const book = data.docs[0];
+  const book = data.items[0];
+  const volumeInfo = book.volumeInfo;
   const bookEntry = {
-    title: book.title,
-    author: book.author_name || "Unknown",
-    image: book.cover_i
-      ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg`
-      : "",
+    title: volumeInfo.title || bookTitle,
+    author: volumeInfo.authors ? volumeInfo.authors.join(", ") : "Unknown",
+    image: volumeInfo.imageLinks?.thumbnail?.replace("http://", "https://") || 
+           volumeInfo.imageLinks?.smallThumbnail?.replace("http://", "https://") || "",
     status: "reading",
     start_date: new Date().toISOString().split("T")[0],
     end_date: null,
     issue_number: parseInt(issueNumber),
+    google_books_id: book.id,
+    isbn: volumeInfo.industryIdentifiers?.find(id => id.type === "ISBN_13")?.identifier || 
+          volumeInfo.industryIdentifiers?.find(id => id.type === "ISBN_10")?.identifier || "",
+    published_date: volumeInfo.publishedDate || "",
+    description: volumeInfo.description || "",
+    page_count: volumeInfo.pageCount || null,
   };
 
   books.push(bookEntry);
@@ -118,5 +131,32 @@ if (eventAction === "opened") {
       issue_number: issueNumber,
       body: `⚠️ Book not found in tracking list for issue #${issueNumber}`,
     });
+  }
+
+} else if (eventAction === "deleted") {
+  // Find and remove the book using issue number
+  const targetIssueNumber = parseInt(issueNumber);
+  console.log(`Looking for book to delete with issue number: ${targetIssueNumber}`);
+  console.log(`Available books:`, books.map(book => ({ title: book.title, issue_number: book.issue_number })));
+  
+  const bookIndex = books.findIndex(book => 
+    parseInt(book.issue_number) === targetIssueNumber
+  );
+
+  if (bookIndex !== -1) {
+    const deletedBook = books[bookIndex];
+    books.splice(bookIndex, 1); // Remove the book from the array
+    
+    writeFileSync(booksFile, JSON.stringify(books, null, 2));
+    console.log(`Book removed from books.json: ${deletedBook.title}`);
+
+    // Handle author field - it might be an array or string
+    const author = Array.isArray(deletedBook.author) 
+      ? deletedBook.author.join(", ") 
+      : deletedBook.author;
+
+    console.log(`🗑️ Book deleted: **${deletedBook.title}** by ${author}`);
+  } else {
+    console.log(`Book not found in books.json for issue #${issueNumber} - nothing to delete`);
   }
 }

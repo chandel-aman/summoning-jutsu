@@ -2,7 +2,7 @@ name: Track Books
 
 on:
   issues:
-    types: [opened, closed]
+    types: [opened, closed, deleted]
 
 jobs:
   track-book:
@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Fetch full history to preserve books.json
+          fetch-depth: 0 # Fetch full history to preserve books.json
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -28,6 +28,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_EVENT_ISSUE_NUMBER: ${{ github.event.issue.number }}
           GITHUB_EVENT_ACTION: ${{ github.event.action }}
+          GOOGLE_BOOKS_API_KEY: ${{ secrets.GOOGLE_BOOKS_API_KEY }}
         run: node .scripts/track_book.js
 
       - name: Commit and push changes
@@ -41,7 +42,7 @@ jobs:
             git commit -m "Update books.json - ${{ github.event.action }} issue #${{ github.event.issue.number }}"
             git push
           fi
-      
+
       - name: Deploy JSON to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
