@@ -1,13 +1,14 @@
 [
   {
-    "title": "Harry Potter and the Order of the Phoenix",
+    "title": "Harry Potter and the Goblet of Fire",
     "author": [
-      "J. K. Rowling"
+      "J. K. Rowling",
+      "Jim Kay"
     ],
-    "image": "https://covers.openlibrary.org/b/id/10523466-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/12059372-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 19
+    "issue_number": 18
   }
 ]
