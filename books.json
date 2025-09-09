@@ -1,13 +1,13 @@
 [
   {
-    "title": "And Then There Were None",
+    "title": "The Alchemist, 1612",
     "author": [
-      "Agatha Christie"
+      "Ben Jonson"
     ],
-    "image": "https://covers.openlibrary.org/b/id/11172296-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/7463992-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 9
+    "issue_number": 10
   }
 ]
