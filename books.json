@@ -1,13 +1,13 @@
 [
   {
-    "title": "Harry Potter and the Prisoner of Azkaban",
+    "title": "Harry Potter and the Order of the Phoenix",
     "author": [
       "J. K. Rowling"
     ],
-    "image": "https://covers.openlibrary.org/b/id/10580435-L.jpg",
+    "image": "https://covers.openlibrary.org/b/id/10523466-L.jpg",
     "status": "reading",
     "start_date": "2025-09-09",
     "end_date": null,
-    "issue_number": 17
+    "issue_number": 19
   }
 ]
