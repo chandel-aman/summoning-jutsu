@@ -25,9 +25,17 @@ function calculateReadTime(content) {
   return `${readTime} min read`;
 }
 
-readdirSync(blogDir, { withFileTypes: true })
-  .filter((d) => d.isDirectory())
-  .forEach((dir) => {
+// Check if blog directory exists and has content
+if (!existsSync(blogDir)) {
+  console.log(`Blog directory '${blogDir}' does not exist. Skipping blog generation.`);
+} else {
+  const blogDirs = readdirSync(blogDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory());
+  
+  if (blogDirs.length === 0) {
+    console.log(`Blog directory '${blogDir}' is empty. No blog posts to process.`);
+  } else {
+    blogDirs.forEach((dir) => {
     const mdxPath = join(blogDir, dir.name, "index.mdx");
     if (existsSync(mdxPath)) {
       const fileContent = readFileSync(mdxPath, "utf-8");
@@ -58,6 +66,8 @@ readdirSync(blogDir, { withFileTypes: true })
       writeFileSync(individualMdxPath, fileContent);
     }
   });
+  }
+}
 
 // Sort blogs by date (newest first)
 blogs.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
