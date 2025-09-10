@@ -48,7 +48,7 @@ if (eventAction === "opened") {
   
   const apiKeyParam = apiKey ? `&key=${apiKey}` : "";
   const res = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=intitle:${query}&maxResults=1${apiKeyParam}`
+    `https://www.googleapis.com/books/v1/volumes?q=intitle:${query}&maxResults=10${apiKeyParam}`
   );
   const data = await res.json();
 
@@ -62,8 +62,10 @@ if (eventAction === "opened") {
     process.exit(0);
   }
 
-  // Get book details
-  const book = data.items[0];
+  // Find the first book that has an image, fallback to first result if none have images
+  const book = data.items.find(item => 
+    item.volumeInfo?.imageLinks?.thumbnail || item.volumeInfo?.imageLinks?.smallThumbnail
+  ) || data.items[0];
   const volumeInfo = book.volumeInfo;
   const bookEntry = {
     title: volumeInfo.title || bookTitle,
