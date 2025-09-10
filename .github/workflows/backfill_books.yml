@@ -39,3 +39,11 @@ jobs:
             git commit -m "Backfill books.json with existing issues"
             git push
           fi
+      - name: Deploy JSON to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./otaku-archive
+          keep_files: true
+          user_name: github-actions
+          user_email: github-actions@github.com
