@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "slug": "building-your-own-javascript-promises",
+    "title": "Building Your Own JavaScript Promises",
+    "description": "Learn how JavaScript Promises work under the hood by building a complete Promise implementation from scratch. This step-by-step tutorial covers state management, asynchronous resolution, chaining, microtask queues, and more.",
+    "date": "2025-11-09",
+    "readTime": "18 min read",
+    "path": "building-your-own-javascript-promises/index.mdx",
+    "image": null,
+    "wordCount": 3463
+  }
+]
