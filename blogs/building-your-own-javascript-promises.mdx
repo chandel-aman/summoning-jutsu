@@ -66,18 +66,18 @@ console.log("3. Script End (Sync)");
 
 This example demonstrates several key Promise characteristics:
 
-- **<Highlight action='underline' color='#FFBF00' isView={true}>Immediate execution</Highlight>**: The executor function <Highlight action='circle' color='#FF5733' padding={5} isView={true}>runs synchronously</Highlight> when the Promise is created
-- **<Highlight action='underline' color='#FFBF00' isView={true}>Immutability</Highlight>**: Only the first `resolve()` or `reject()` call takes effect; subsequent calls are ignored
-- **<Highlight action='underline' color='#FFBF00' isView={true}>Microtask queue</Highlight>**: Promise callbacks execute as microtasks, running before macrotasks like `setTimeout`
-- **<Highlight action='underline' color='#FFBF00' isView={true}>Error propagation</Highlight>**: Errors thrown in `.then()` handlers automatically propagate to the next `.catch()` handler
-- **<Highlight action='underline' color='#FFBF00' isView={true}>Recovery</Highlight>**: A `.catch()` handler can return a value, which fulfills the chain and allows subsequent `.then()` handlers to execute
-- **<Highlight action='underline' color='#FFBF00' isView={true}>Chaining</Highlight>**: Each `.then()` and `.catch()` <Highlight action='circle' color='#FF5733' padding={5} isView={true}>returns a new Promise</Highlight>, enabling sequential asynchronous operations
+- **Immediate execution**: The executor function runs synchronously when the Promise is created
+- **Immutability**: Only the first `resolve()` or `reject()` call takes effect; subsequent calls are ignored
+- **Microtask queue**: Promise callbacks execute as microtasks, running before macrotasks like `setTimeout`
+- **Error propagation**: Errors thrown in `.then()` handlers automatically propagate to the next `.catch()` handler
+- **Recovery**: A `.catch()` handler can return a value, which fulfills the chain and allows subsequent `.then()` handlers to execute
+- **Chaining**: Each `.then()` and `.catch()` returns a new Promise, enabling sequential asynchronous operations
 
 Now, let's build our own `MyPromise` implementation that replicates this behavior step by step!
 
 ### Step 1: Basic Constructor
 
-Right now, we don't have any foundation for our Promise implementation. <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>We need something that can run the executor function immediately when the Promise is created</Highlight>, just like how native Promises work.
+Right now, we don't have any foundation for our Promise implementation. <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">We need something that can run the executor function immediately when the Promise is created</Highlight>, just like how native Promises work.
 
 We're starting by <Highlight action='highlight' color='#DAF7A6' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">creating a simple class with a constructor that takes an executor function and runs it right away</Highlight>. This gives us the basic structure we can build upon.
 
@@ -105,7 +105,7 @@ const p1 = new MyPromise(() => {
 
 ### Step 2: Adding State Management
 
-The issue right now is that our constructor runs the executor function, but <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>it doesn't give us any way to capture what happens inside that function</Highlight>. We need a mechanism to track whether the asynchronous operation succeeded or failed, and what the result was.
+The issue right now is that our constructor runs the executor function, but <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">it doesn't give us any way to capture what happens inside that function</Highlight>. We need a mechanism to track whether the asynchronous operation succeeded or failed, and what the result was.
 
 What we're looking for is a way to store the Promise's current state and any value it produces, so we can access this information later when we need to handle the results.
 
@@ -153,7 +153,7 @@ console.log(p1);
 
 ### Step 3: Error Handling
 
-The problem we're facing now is that <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>if something goes wrong inside the executor function and it throws a synchronous error, our Promise just crashes</Highlight> instead of handling it gracefully. We need to make sure that any errors, whether they happen synchronously or asynchronously, are properly captured and treated as rejections.
+The problem we're facing now is that <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">if something goes wrong inside the executor function and it throws a synchronous error, our Promise just crashes</Highlight> instead of handling it gracefully. We need to make sure that any errors, whether they happen synchronously or asynchronously, are properly captured and treated as rejections.
 
 What we want is for our Promise to automatically reject when the executor throws an error, just like the native Promise does. This creates a consistent experience where all errors - synchronous or asynchronous - are handled through the same Promise rejection mechanism.
 
@@ -205,11 +205,11 @@ console.log(p1);
 
 ### Step 4: Implementing the `then()` Method
 
-At this point, we have Promises that can track their state and handle errors, but <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>there's no way for anyone using our Promise to actually do something with the result</Highlight>. We need a mechanism to register callbacks that will run when the Promise resolves or rejects.
+At this point, we have Promises that can track their state and handle errors, but <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">there's no way for anyone using our Promise to actually do something with the result</Highlight>. We need a mechanism to register callbacks that will run when the Promise resolves or rejects.
 
 What we need is the ability to attach success and failure handlers that will be called at the appropriate time, giving users a way to react to the Promise's outcome.
 
-We're <Highlight action='highlight' color='#DAF7A6' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">implementing the \`then()\` method that accepts two optional callback functions</Highlight> - one for when the Promise resolves successfully, and one for when it rejects. For now, we're keeping it simple by only handling the case where the Promise is <Highlight action='circle' color='#FF5733' padding={5} isView={true}>already settled</Highlight> when `then()` is called.
+We're <Highlight action='highlight' color='#DAF7A6' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">implementing the \`then()\` method that accepts two optional callback functions</Highlight> - one for when the Promise resolves successfully, and one for when it rejects. For now, we're keeping it simple by only handling the case where the Promise is already settled when `then()` is called.
 
 This is crucial because without `then()`, our Promise would be completely useless - we'd have no way to access the asynchronous results or handle errors that occur.
 
@@ -307,7 +307,7 @@ console.log(p2);
 
 ### Step 5: Implementing the `catch()` Method
 
-While we now have the `then()` method for handling both success and failure cases, <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>it's not very convenient when you only care about errors</Highlight>. You have to pass `undefined` as the first argument and your error handler as the second, which feels clunky and unclear.
+While we now have the `then()` method for handling both success and failure cases, <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">it's not very convenient when you only care about errors</Highlight>. You have to pass `undefined` as the first argument and your error handler as the second, which feels clunky and unclear.
 
 What we really want is a cleaner, more intuitive way to handle just the rejection case, making error handling code more readable and explicit.
 
@@ -380,7 +380,7 @@ console.log(p1);
 
 ### Step 6: One-Time Settlement Guarantee
 
-The current implementation has a serious problem - <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>our Promise can be resolved or rejected multiple times</Highlight>. If the executor calls `resolve()` and then `reject()`, or vice versa, both calls would change the state, which could lead to unpredictable behavior and confusion about what the "real" result is.
+The current implementation has a serious problem - <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">our Promise can be resolved or rejected multiple times</Highlight>. If the executor calls `resolve()` and then `reject()`, or vice versa, both calls would change the state, which could lead to unpredictable behavior and confusion about what the "real" result is.
 
 What we need is a guarantee that once a Promise is settled (either resolved or rejected), it stays that way forever. This immutability ensures that the outcome is definitive and trustworthy.
 
@@ -451,7 +451,7 @@ p1.then(
 
 ### Step 7: Supporting Asynchronous Resolution
 
-We're running into a fundamental limitation with our current approach. <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>If someone calls \`then()\` on a Promise that's still pending (like when waiting for a network request or timer), our current implementation does nothing</Highlight> because it only handles already-settled Promises. The callback gets registered but never executes when the Promise finally resolves.
+We're running into a fundamental limitation with our current approach. <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">If someone calls \`then()\` on a Promise that's still pending (like when waiting for a network request or timer), our current implementation does nothing</Highlight> because it only handles already-settled Promises. The callback gets registered but never executes when the Promise finally resolves.
 
 What we need is a way to remember the callbacks that are registered before the Promise settles, so we can execute them later when the resolution actually happens.
 
@@ -533,7 +533,7 @@ p1.then(
 
 ### Step 8: Promise Chaining
 
-Our Promise implementation can handle asynchronous operations and execute callbacks, but <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>it can't be chained together</Highlight>. If you try to call `.then().then()`, you'll get an error because our current `then()` method doesn't return anything.
+Our Promise implementation can handle asynchronous operations and execute callbacks, but <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">it can't be chained together</Highlight>. If you try to call `.then().then()`, you'll get an error because our current `then()` method doesn't return anything.
 
 What we want is the ability to sequence asynchronous operations - to take the result of one Promise and use it as input for another, creating a clean, readable flow of dependent operations.
 
@@ -657,7 +657,7 @@ p1.then((value) => {
 
 ### Step 9: Microtask Queue Integration
 
-Even though our Promise is functionally complete, there's a subtle but critical timing issue. <Highlight action='box' color='#FF5733' multiline={true} padding={5} isView={true}>Our callbacks are executing synchronously when the Promise settles, but native Promises defer their callbacks to run as microtasks</Highlight>. This means our implementation might execute callbacks at the wrong time relative to other asynchronous operations.
+Even though our Promise is functionally complete, there's a subtle but critical timing issue. <Highlight action='highlight' color='#FF5733' multiline={true} isView={true} className="text-gray-300 dark:text-gray-700">Our callbacks are executing synchronously when the Promise settles, but native Promises defer their callbacks to run as microtasks</Highlight>. This means our implementation might execute callbacks at the wrong time relative to other asynchronous operations.
 
 What we need is for our Promise callbacks to follow the proper event loop ordering - running after the current synchronous code but before macrotasks like `setTimeout`.
 
@@ -802,24 +802,24 @@ Perfect! Our `MyPromise` implementation produces the exact same output and behav
 
 Through this 9-step journey, we've built a fully functional Promise implementation that demonstrates:
 
-1. **<Highlight action='underline' color='#FFBF00' isView={true}>Immediate executor execution</Highlight>** - The executor function runs synchronously when the Promise is created
-2. **<Highlight action='underline' color='#FFBF00' isView={true}>State management</Highlight>** - Tracking the Promise's state (pending → resolved/rejected) and value
-3. **<Highlight action='underline' color='#FFBF00' isView={true}>Error handling</Highlight>** - Automatically converting synchronous errors into rejections
-4. **<Highlight action='underline' color='#FFBF00' isView={true}>Callback registration</Highlight>** - The `then()` method for handling fulfillment and rejection
-5. **<Highlight action='underline' color='#FFBF00' isView={true}>Error handling API</Highlight>** - The `catch()` method as syntactic sugar for error handling
-6. **<Highlight action='underline' color='#FFBF00' isView={true}>Immutability</Highlight>** - Ensuring a Promise can only be settled once
-7. **<Highlight action='underline' color='#FFBF00' isView={true}>Asynchronous support</Highlight>** - Storing and executing callbacks when the Promise settles
-8. **<Highlight action='underline' color='#FFBF00' isView={true}>Promise chaining</Highlight>** - Returning new Promises from `then()` to enable sequential operations
-9. **<Highlight action='underline' color='#FFBF00' isView={true}>Microtask integration</Highlight>** - Using the microtask queue for proper execution order
+1. **Immediate executor execution** - The executor function runs synchronously when the Promise is created
+2. **State management** - Tracking the Promise's state (pending → resolved/rejected) and value
+3. **Error handling** - Automatically converting synchronous errors into rejections
+4. **Callback registration** - The `then()` method for handling fulfillment and rejection
+5. **Error handling API** - The `catch()` method as syntactic sugar for error handling
+6. **Immutability** - Ensuring a Promise can only be settled once
+7. **Asynchronous support** - Storing and executing callbacks when the Promise settles
+8. **Promise chaining** - Returning new Promises from `then()` to enable sequential operations
+9. **Microtask integration** - Using the microtask queue for proper execution order
 
 ### Key Takeaways
 
 By building Promises from scratch, you've gained a deep understanding of:
 
-- How Promises <Highlight action='underline' color='#FFBF00' isView={true}>manage state and handle asynchronous operations</Highlight>
-- The <Highlight action='underline' color='#FFBF00' isView={true}>importance of the microtask queue</Highlight> in JavaScript's event loop
-- How <Highlight action='underline' color='#FFBF00' isView={true}>Promise chaining works</Highlight> under the hood
-- Why <Highlight action='underline' color='#FFBF00' isView={true}>immutability is crucial</Highlight> for predictable asynchronous behavior
+- How Promises manage state and handle asynchronous operations
+- The importance of the microtask queue in JavaScript's event loop
+- How Promise chaining works under the hood
+- Why immutability is crucial for predictable asynchronous behavior
 
 This knowledge will help you write better asynchronous JavaScript code, debug complex Promise-related issues, and understand how modern async/await syntax works (since it's built on Promises).
 
