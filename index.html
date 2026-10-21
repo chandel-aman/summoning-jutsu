@@ -48,7 +48,7 @@ fetch("./books.json").then(r => r.json()).then(books => {
     <div class="card">
       ${b.image ? `<img loading="lazy" src="${b.image}" alt="">` : ""}
       <h3>${fixCase(b.title)}</h3><p>${fixCase(b.author)}</p>
-      <p><span class="badge ${b.status}">${fixCase(b.status)}</span> ${b.published_date || ""}</p>
+      <p><span class="badge ${b.status}">${fixCase(b.status)}</span></p>
     </div>`).join("");
 }).catch(e => document.getElementById("books").textContent = "Failed: " + e);
 
