@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
-import fetch from "node-fetch";
 import { Octokit } from "@octokit/rest";
+import { searchBook } from "./open_library.js";
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -57,21 +57,9 @@ for (const issue of actualIssues) {
   console.log(`Processing issue #${issueNumber}: ${bookTitle} (${issue.state})`);
   
   try {
-    // Search Google Books API
-    const query = encodeURIComponent(bookTitle);
-    const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
-    
-    if (!apiKey) {
-      console.log("Warning: GOOGLE_BOOKS_API_KEY not set, using public API (limited requests)");
-    }
-    
-    const apiKeyParam = apiKey ? `&key=${apiKey}` : "";
-    const res = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=intitle:${query}&maxResults=1${apiKeyParam}`
-    );
-    const data = await res.json();
+    const found = await searchBook(bookTitle);
 
-    if (!data.items || data.items.length === 0) {
+    if (!found) {
       console.log(`❌ Book not found for: ${bookTitle}`);
       // Still add it to the list but mark as not found
       const bookEntry = {
@@ -89,32 +77,20 @@ for (const issue of actualIssues) {
       continue;
     }
 
-    // Get book details
-    const book = data.items[0];
-    const volumeInfo = book.volumeInfo;
     const bookEntry = {
-      title: volumeInfo.title || bookTitle,
-      author: volumeInfo.authors ? volumeInfo.authors.join(", ") : "Unknown",
-      image: volumeInfo.imageLinks?.thumbnail?.replace("http://", "https://") || 
-             volumeInfo.imageLinks?.smallThumbnail?.replace("http://", "https://") || "",
+      ...found,
       status: isClosed ? "completed" : "reading",
       start_date: issue.created_at.split("T")[0],
       end_date: isClosed ? issue.closed_at?.split("T")[0] || new Date().toISOString().split("T")[0] : null,
       issue_number: issueNumber,
-      google_books_id: book.id,
-      isbn: volumeInfo.industryIdentifiers?.find(id => id.type === "ISBN_13")?.identifier || 
-            volumeInfo.industryIdentifiers?.find(id => id.type === "ISBN_10")?.identifier || "",
-      published_date: volumeInfo.publishedDate || "",
-      description: volumeInfo.description || "",
-      page_count: volumeInfo.pageCount || null,
     };
 
     books.push(bookEntry);
     addedCount++;
     console.log(`✅ Added: ${bookEntry.title} by ${bookEntry.author}`);
-    
-    // Add a small delay to avoid rate limiting
-    await new Promise(resolve => setTimeout(resolve, 100));
+
+    // Open Library: 1 req/s anonymous
+    await new Promise(resolve => setTimeout(resolve, 1100));
     
   } catch (error) {
     console.error(`Error processing issue #${issueNumber}:`, error.message);

@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
-import fetch from "node-fetch";
 import { Octokit } from "@octokit/rest";
+import { searchBook } from "./open_library.js";
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
@@ -38,21 +38,9 @@ if (existsSync(booksFile)) {
 }
 
 if (eventAction === "opened") {
-  // Search Google Books API
-  const query = encodeURIComponent(bookTitle);
-  const apiKey = process.env.GOOGLE_BOOKS_API_KEY;
-  
-  if (!apiKey) {
-    console.log("Warning: GOOGLE_BOOKS_API_KEY not set, using public API (limited requests)");
-  }
-  
-  const apiKeyParam = apiKey ? `&key=${apiKey}` : "";
-  const res = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=intitle:${query}&maxResults=10${apiKeyParam}`
-  );
-  const data = await res.json();
+  const found = await searchBook(bookTitle, { fetchDescription: true });
 
-  if (!data.items || data.items.length === 0) {
+  if (!found) {
     await octokit.issues.createComment({
       owner,
       repo,
@@ -62,26 +50,12 @@ if (eventAction === "opened") {
     process.exit(0);
   }
 
-  // Find the first book that has an image, fallback to first result if none have images
-  const book = data.items.find(item => 
-    item.volumeInfo?.imageLinks?.thumbnail || item.volumeInfo?.imageLinks?.smallThumbnail
-  ) || data.items[0];
-  const volumeInfo = book.volumeInfo;
   const bookEntry = {
-    title: volumeInfo.title || bookTitle,
-    author: volumeInfo.authors ? volumeInfo.authors.join(", ") : "Unknown",
-    image: volumeInfo.imageLinks?.thumbnail?.replace("http://", "https://") || 
-           volumeInfo.imageLinks?.smallThumbnail?.replace("http://", "https://") || "",
+    ...found,
     status: "reading",
     start_date: new Date().toISOString().split("T")[0],
     end_date: null,
     issue_number: parseInt(issueNumber),
-    google_books_id: book.id,
-    isbn: volumeInfo.industryIdentifiers?.find(id => id.type === "ISBN_13")?.identifier || 
-          volumeInfo.industryIdentifiers?.find(id => id.type === "ISBN_10")?.identifier || "",
-    published_date: volumeInfo.publishedDate || "",
-    description: volumeInfo.description || "",
-    page_count: volumeInfo.pageCount || null,
   };
 
   books.push(bookEntry);
