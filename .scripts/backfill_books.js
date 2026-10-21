@@ -53,6 +53,16 @@ for (const issue of actualIssues) {
     skippedCount++;
     continue;
   }
+
+  // Same title under another issue = duplicate (e.g. closed stale issue + reopened fresh one)
+  const duplicateTitle = books.find(
+    book => book.title?.toLowerCase().trim() === bookTitle.toLowerCase().trim()
+  );
+  if (duplicateTitle) {
+    console.log(`Skipping issue #${issueNumber} - same title already tracked by issue #${duplicateTitle.issue_number}`);
+    skippedCount++;
+    continue;
+  }
   
   console.log(`Processing issue #${issueNumber}: ${bookTitle} (${issue.state})`);
   
