@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Summoning Jutsu — API</title>
+<style>
+  body{font-family:system-ui,sans-serif;background:#0d1117;color:#e6edf3;margin:0;padding:2rem;max-width:1100px;margin-inline:auto;font-size:16px;line-height:1.5}
+  h1{font-size:2.5rem;line-height:1.1;margin:0 0 .5rem}
+  h2{font-size:1.6rem;margin:2.2rem 0 .8rem}
+  a{color:#58a6ff}
+  code{background:#161b22;padding:.15rem .4rem;border-radius:6px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem}
+  .card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:.75rem}
+  .card img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:6px;background:#30363d}
+  .card h3{font-size:.9rem;margin:.5rem 0 .25rem}
+  .card p{font-size:.8rem;color:#8b949e;margin:.15rem 0}
+  .badge{font-size:.7rem;padding:.1rem .45rem;border-radius:99px;border:1px solid #30363d}
+  .reading{color:#3fb950}.completed{color:#58a6ff}
+  li{margin:.4rem 0}
+</style>
+</head>
+<body>
+<h1>Summoning Jutsu API</h1>
+<p>Static JSON APIs hosted on GitHub Pages. Consumed by <a href="https://chandelaman.vercel.app">chandelaman.vercel.app</a>.</p>
+
+<h2>Endpoints</h2>
+<ul id="endpoints"></ul>
+
+<h2>Books <span id="book-count"></span></h2>
+<div class="grid" id="books"><p>Loading…</p></div>
+
+<h2>Blogs <span id="blog-count"></span></h2>
+<ul id="blogs"><li>Loading…</li></ul>
+
+<script>
+const fixCase = s => (s ?? "").trim().split(/\s+/).map(w => w.split("-").map(p =>
+  !/[A-Za-z]/.test(p) || p.includes(".") || (p !== p.toUpperCase() && p !== p.toLowerCase())
+    ? p : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join("-")).join(" ");
+const FILES = ["books.json", "blogs.json", "about.json"];
+document.getElementById("endpoints").innerHTML = FILES.map(f =>
+  `<li><a href="./${f}"><code>GET /${f}</code></a></li>`).join("") +
+  `<li><code>GET /blogs/{slug}.mdx</code> — individual posts, see blogs.json</li>`;
+
+fetch("./books.json").then(r => r.json()).then(books => {
+  document.getElementById("book-count").textContent = `(${books.length})`;
+  document.getElementById("books").innerHTML = books.map(b => `
+    <div class="card">
+      ${b.image ? `<img loading="lazy" src="${b.image}" alt="">` : ""}
+      <h3>${fixCase(b.title)}</h3><p>${fixCase(b.author)}</p>
+      <p><span class="badge ${b.status}">${fixCase(b.status)}</span> ${b.published_date || ""}</p>
+    </div>`).join("");
+}).catch(e => document.getElementById("books").textContent = "Failed: " + e);
+
+fetch("./blogs.json").then(r => r.json()).then(blogs => {
+  document.getElementById("blog-count").textContent = `(${blogs.length})`;
+  document.getElementById("blogs").innerHTML = blogs.map(b => `
+    <li><a href="./blogs/${b.slug}.mdx">${fixCase(b.title)}</a> — ${b.date} · ${b.readTime}</li>`).join("");
+}).catch(e => document.getElementById("blogs").textContent = "Failed: " + e);
+</script>
+</body>
+</html>
